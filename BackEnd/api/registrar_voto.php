@@ -16,7 +16,7 @@ $user = 'neondb_owner';
 $password = 'npg_OeI8fA6aNsDg';
 
 try {
-    $pdo = new PDO("pgsql:host=$host;port=$port;dbname=$dbname;sslmode=require;options=endpoint=ep-patient-tree-aa8f8vne", $user, $password);
+    $pdo = new PDO("pgsql:host=$host;port=$port;dbname=$dbname;sslmode=require;options=endpoint=ep-patient-tree-aa8f8vne-pooler", $user, $password);
     $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
     $sql = "INSERT INTO votos (votante_id, candidato_id) VALUES (:votante_id, :candidato_id)";
