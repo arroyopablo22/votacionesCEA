@@ -6,7 +6,7 @@ export default defineConfig({
   server: {
     port: 3000,
   },
-  base: "/FrontEnd/",
+  base: "/votacionesCEA",
   build: {
     target: 'esnext',
   },
