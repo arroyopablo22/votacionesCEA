@@ -10,7 +10,7 @@ const App = () => {
   // Función para cargar estudiantes según el grado seleccionado
   const cargarEstudiantes = () => {
     if (grado()) {
-      fetch(`http://localhost/votaciones/BackEnd/cargar_estudiantes.php?grado=${grado()}`)
+      fetch(`https://votacionescea-production.up.railway.app/api/cargar_estudiantes.php?grado=${grado()}`)
         .then((response) => response.json())
         .then((data) => setEstudiantes(data))
         .catch((error) => console.error("Error al cargar estudiantes:", error));
@@ -19,7 +19,7 @@ const App = () => {
 
   // Función para cargar candidatos según el grado seleccionado
   const cargarCandidatos = () => {
-    fetch(`http://localhost/votaciones/BackEnd/cargar_candidatos.php`)
+    fetch(`https://votacionescea-production.up.railway.app/api/cargar_candidatos.php`)
       .then((response) => response.json())
       .then((data) => setCandidatos(data))
       .catch((error) => console.error("Error al cargar candidatos:", error));
@@ -29,7 +29,7 @@ const App = () => {
   const registrarVoto = (event) => {
     event.preventDefault();
     if (estudianteId()) {
-      fetch("http://localhost/votaciones/BackEnd/registrar_voto.php", {
+      fetch("https://votacionescea-production.up.railway.app/api/registrar_voto.php", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
