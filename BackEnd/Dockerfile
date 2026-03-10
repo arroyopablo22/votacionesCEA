@@ -1,12 +1,14 @@
 FROM php:8.2-apache
 
-# copiar archivos del backend
-COPY . /var/www/html/
+# Desactivar otros MPM y dejar solo prefork
+RUN a2dismod mpm_event || true
+RUN a2dismod mpm_worker || true
+RUN a2enmod mpm_prefork
 
-# instalar extensiones necesarias
+# Instalar extensiones necesarias
 RUN docker-php-ext-install mysqli pdo pdo_mysql
 
-# habilitar mod_rewrite
-RUN a2enmod rewrite
+# Copiar archivos del backend
+COPY . /var/www/html/
 
 EXPOSE 80
