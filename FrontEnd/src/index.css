@@ -1,0 +1,145 @@
+body {
+  margin: 0;
+  font-family: "Segoe UI", Roboto, Arial, sans-serif;
+  background-image: url("/imagenes/bg.jpg");
+  background-size: cover;
+  background-position: center;
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* contenedor principal */
+.fondo {
+  background: rgba(255, 255, 255, 0.92);
+  backdrop-filter: blur(6px);
+  padding: 40px;
+  border-radius: 20px;
+  width: 90%;
+  max-width: 900px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.25);
+}
+
+/* titulo */
+h1 {
+  text-align: center;
+  color: #222;
+  margin-bottom: 25px;
+}
+
+h2 {
+  text-align: center;
+  color: #333;
+  margin-top: 30px;
+}
+
+/* formulario */
+form {
+  width: 800px;
+}
+
+/* labels */
+label {
+  display: block;
+  margin-top: 15px;
+  font-weight: 600;
+  color: #444;
+}
+
+/* select moderno */
+select {
+  width: 100%;
+  padding: 12px;
+  margin-top: 5px;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  font-size: 15px;
+  transition: 0.2s;
+}
+
+select:focus {
+  outline: none;
+  border-color: #4caf50;
+  box-shadow: 0 0 4px #4caf50;
+}
+
+/* contenedor candidatos */
+.candidatos-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 20px;
+  margin-top: 20px;
+}
+
+/* tarjeta candidato */
+.candidato {
+  background: white;
+  border-radius: 15px;
+  padding: 15px;
+  text-align: center;
+  border: 2px solid transparent;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+  transition: all 0.25s ease;
+  cursor: pointer;
+  position: relative;
+}
+
+/* hover tarjeta */
+.candidato:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+}
+
+/* imagen candidato */
+.candidato img {
+  width: 90px;
+  height: 90px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 4px solid #f0f0f0;
+  margin-bottom: 10px;
+}
+
+/* nombre */
+.candidato b {
+  display: block;
+  margin-top: 5px;
+  color: #222;
+}
+
+/* radio oculto */
+.candidato input[type="radio"] {
+  display: none;
+}
+
+/* candidato seleccionado */
+.candidato input[type="radio"]:checked + br + img {
+  border-color: #4caf50;
+}
+
+/* borde cuando está seleccionado */
+.candidato input[type="radio"]:checked ~ b {
+  color: #4caf50;
+  font-weight: 700;
+}
+
+/* botón votar */
+button[type="submit"] {
+  margin-top: 30px;
+  width: 100%;
+  padding: 14px;
+  border: none;
+  border-radius: 10px;
+  background: linear-gradient(135deg,#4caf50,#2e7d32);
+  color: white;
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: 0.25s;
+}
+
+button[type="submit"]:hover {
+  transform: scale(1.03);
+  box-shadow: 0 6px 15px rgba(0,0,0,0.25);
+}
