@@ -53,6 +53,31 @@ label {
   color: #444;
 }
 
+.cargando {
+  margin-top: 20px;
+  text-align: center;
+}
+
+.spinner {
+  border: 6px solid #eee;
+  border-top: 6px solid #19b4c6;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  animation: spin 1s linear infinite;
+  margin: auto;
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg)
+  }
+
+  100% {
+    transform: rotate(360deg)
+  }
+}
+
 /* select moderno */
 select {
   width: 100%;
@@ -155,6 +180,44 @@ button[type="submit"] {
 button[type="submit"]:hover {
   transform: scale(1.03);
   box-shadow: 0 6px 15px rgba(0, 0, 0, 0.25);
+}
+
+.popup-bg {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.7);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.popup {
+  background: white;
+  color: black;
+  padding: 25px;
+  border-radius: 10px;
+  text-align: center;
+  width: 300px;
+}
+
+.popup input {
+  width: 90%;
+  padding: 8px;
+  margin: 10px 0;
+}
+
+.btnResultados {
+  position: fixed;
+  top: 10px;
+  right: 10px;
+  padding: 10px 15px;
+  background: #ffcc00;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
 }
 
 /* ============================= */

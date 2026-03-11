@@ -1,12 +1,19 @@
-import { createSignal, Show } from "solid-js";
+import { createSignal, Show, onMount } from "solid-js";
+import toast, { Toaster } from "solid-toast";
 
 const App = () => {
   const [grado, setGrado] = createSignal("");
   const [candidatos, setCandidatos] = createSignal([]);
   const [estudiantes, setEstudiantes] = createSignal([]);
+  const [resultados, setResultados] = createSignal([String, String]);
   const [candidatoId, setCandidatoId] = createSignal("");
   const [estudianteId, setEstudianteId] = createSignal("");
   const [loading, setLoading] = createSignal(false);
+  const [mostrarLogin, setMostrarLogin] = createSignal(false);
+  const [password, setPassword] = createSignal("");
+  const [accesoPermitido, setAccesoPermitido] = createSignal(false);
+
+  const CLAVE = "-VotacionesCEA2026..";
 
   // Función para cargar estudiantes según el grado seleccionado
   const cargarEstudiantes = () => {
@@ -24,6 +31,15 @@ const App = () => {
       .then((response) => response.json())
       .then((data) => setCandidatos(data))
       .catch((error) => console.error("Error al cargar candidatos:", error));
+  };
+
+  //Función para cargar resultados:
+  const cargarResultados = () => {
+    debugger
+    fetch(`https://votacionescea-production.up.railway.app/api/cargar_resultados.php`)
+      .then((response) => response.json())
+      .then((data) => setResultados(data))
+      .catch((error) => console.error("Error al cargar estudiantes:", error));
   };
 
   // Función para registrar voto
@@ -47,11 +63,9 @@ const App = () => {
         .then((response) => response.json())
         .then(() => {
 
-          setTimeout(() => {
-            alert("Voto registrado");
-            setLoading(false);
-          }, 2000);
-
+          toast.success("🗳️🎉 ¡Gracias por votar!\n Tu participación es importante");
+          setLoading(false);
+          setGrado("");
           setEstudianteId("");
           setEstudiantes([]);
         })
@@ -65,11 +79,22 @@ const App = () => {
     }
   };
 
-  cargarCandidatos();
+  onMount(() => {
+    cargarCandidatos();
+  });
 
   function onChangeGrade(e) {
     setGrado(e.target.value);
     cargarEstudiantes();
+  }
+
+  function verificarClave() {
+    if (password() === CLAVE) {
+      setAccesoPermitido(true);
+      setMostrarLogin(false);
+    } else {
+      alert("Contraseña incorrecta");
+    }
   }
 
   const formulario =
@@ -125,35 +150,74 @@ const App = () => {
 
   return (
     <div class="fondo">
-      <Show when={loading()} fallback={<>
-        <h1>Elección de personero 2026</h1>
+      <Toaster position="top-center" />
+      <button class="btnResultados" onClick={() => setMostrarLogin(true)}>
+        Ver resultados
+      </button>
 
-        <label for="grado">Selecciona el grado:</label>
-        <select id="grado" onChange={(e) => onChangeGrade(e)} required>
-          <option value="">Selecciona un grado</option>
-          <option value="PROFESOR">PROFESOR</option>
-          <option value="PREESCOLAR">PREESCOLAR</option>
-          <option value="PRIMERO">PRIMERO</option>
-          <option value="SEGUNDO">SEGUNDO</option>
-          <option value="TERCERO">TERCERO</option>
-          <option value="CUARTO">CUARTO</option>
-          <option value="QUINTO">QUINTO</option>
-          <option value="SEXTO">SEXTO</option>
-          <option value="SEPTIMO">SEPTIMO</option>
-          <option value="OCTAVO">OCTAVO</option>
-          <option value="NOVENO">NOVENO</option>
-          <option value="DECIMO">DÉCIMO</option>
-          <option value="ONCE">ONCE</option>
-        </select>
-        {formulario}
+      <Show when={loading()} fallback={
+        <>
+          <h1>Elección de personero 2026</h1>
 
-      </>
+          <label for="grado">Selecciona el grado:</label>
+          <select id="grado" onChange={(e) => onChangeGrade(e)} required>
+            <option value="">Selecciona un grado</option>
+            <option value="PROFESOR">PROFESOR</option>
+            <option value="PREESCOLAR">PREESCOLAR</option>
+            <option value="PRIMERO">PRIMERO</option>
+            <option value="SEGUNDO">SEGUNDO</option>
+            <option value="TERCERO">TERCERO</option>
+            <option value="CUARTO">CUARTO</option>
+            <option value="QUINTO">QUINTO</option>
+            <option value="SEXTO">SEXTO</option>
+            <option value="SEPTIMO">SEPTIMO</option>
+            <option value="OCTAVO">OCTAVO</option>
+            <option value="NOVENO">NOVENO</option>
+            <option value="DECIMO">DÉCIMO</option>
+            <option value="ONCE">ONCE</option>
+          </select>
+          {formulario}
+        </>
 
       }>
-        <p class='cargando'>⏳ Registrando voto...</p>
+        <div class="cargando">
+          <p>Procesando voto...</p>
+          <div class="spinner"></div>
+        </div>
       </Show>
 
+      <Show when={mostrarLogin()}>
+        <div class="popup-bg">
+          <div class="popup">
+            <h3>Acceso a resultados</h3>
 
+            <input
+              type="password"
+              placeholder="Ingrese contraseña"
+              value={password()}
+              onInput={(e) => setPassword(e.target.value)}
+            />
+
+            <button onClick={verificarClave}>Entrar</button>
+            <button onClick={() => setMostrarLogin(false)}>Cancelar</button>
+          </div>
+        </div>
+      </Show>
+
+      <Show when={accesoPermitido()}>
+        <div class="popup-bg">
+          <div class="popup">
+            <h2>Resultados de la votación</h2>
+
+            {cargarResultados()}
+            <div id="resultados">
+              {/* resultados de tu API */}
+            </div>
+
+            <button onClick={() => setAccesoPermitido(false)}>Cerrar</button>
+          </div>
+        </div>
+      </Show>
     </div >
   );
 };
