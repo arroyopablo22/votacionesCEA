@@ -1,7 +1,9 @@
 body {
   margin: 0;
   font-family: "Segoe UI", Roboto, Arial, sans-serif;
-  background-image: url("/imagenes/bg.jpg");
+  background-image:
+    linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)),
+    url("/imagenes/bg.jpg");
   background-size: cover;
   background-position: center;
   min-height: 100vh;
@@ -12,19 +14,23 @@ body {
 
 /* contenedor principal */
 .fondo {
-  background: rgba(255, 255, 255, 0.92);
+  background: rgba(255, 255, 255, 0.889);
   backdrop-filter: blur(6px);
   padding: 40px;
   border-radius: 20px;
   width: 90%;
   max-width: 900px;
-  box-shadow: 0 10px 30px rgba(0,0,0,0.25);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
 }
 
 /* titulo */
 h1 {
   text-align: center;
-  color: #222;
+  background-image: linear-gradient(to right, #115ee2, #009fe8);
+  background-clip: text;
+  -webkit-background-clip: text;
+  color: transparent;
+  -webkit-text-fill-color: transparent;
   margin-bottom: 25px;
 }
 
@@ -36,7 +42,7 @@ h2 {
 
 /* formulario */
 form {
-  width: 800px;
+  width: 100%;
 }
 
 /* labels */
@@ -79,7 +85,7 @@ select:focus {
   padding: 15px;
   text-align: center;
   border: 2px solid transparent;
-  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
   transition: all 0.25s ease;
   cursor: pointer;
   position: relative;
@@ -88,7 +94,7 @@ select:focus {
 /* hover tarjeta */
 .candidato:hover {
   transform: translateY(-5px);
-  box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
 }
 
 /* imagen candidato */
@@ -114,12 +120,12 @@ select:focus {
 }
 
 /* candidato seleccionado */
-.candidato input[type="radio"]:checked + br + img {
+.candidato input[type="radio"]:checked+br+img {
   border-color: #4caf50;
 }
 
 /* borde cuando está seleccionado */
-.candidato input[type="radio"]:checked ~ b {
+.candidato input[type="radio"]:checked~b {
   color: #4caf50;
   font-weight: 700;
 }
@@ -131,7 +137,7 @@ button[type="submit"] {
   padding: 14px;
   border: none;
   border-radius: 10px;
-  background: linear-gradient(135deg,#4caf50,#2e7d32);
+  background: linear-gradient(135deg, #4caf50, #2e7d32);
   color: white;
   font-size: 16px;
   font-weight: bold;
@@ -139,7 +145,86 @@ button[type="submit"] {
   transition: 0.25s;
 }
 
+.cargando {
+  font-style: oblique;
+  font-weight: bolder;
+  font-size: x-large;
+  color: rgb(171, 0, 0);
+}
+
 button[type="submit"]:hover {
   transform: scale(1.03);
-  box-shadow: 0 6px 15px rgba(0,0,0,0.25);
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.25);
+}
+
+/* ============================= */
+/* RESPONSIVE */
+/* ============================= */
+
+/* tablets */
+@media (max-width: 768px) {
+
+  .fondo {
+    padding: 25px;
+  }
+
+  h1 {
+    font-size: 24px;
+  }
+
+  h2 {
+    font-size: 20px;
+  }
+
+  .candidatos-container {
+    grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+    gap: 15px;
+  }
+
+  .candidato img {
+    width: 75px;
+    height: 75px;
+  }
+
+}
+
+/* celulares */
+@media (max-width: 480px) {
+
+  body {
+    align-items: flex-start;
+    padding: 20px 0;
+  }
+
+  .fondo {
+    padding: 20px;
+    border-radius: 15px;
+  }
+
+  h1 {
+    font-size: 20px;
+  }
+
+  h2 {
+    font-size: 18px;
+  }
+
+  .candidatos-container {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .candidato {
+    padding: 12px;
+  }
+
+  .candidato img {
+    width: 65px;
+    height: 65px;
+  }
+
+  button[type="submit"] {
+    padding: 12px;
+    font-size: 15px;
+  }
+
 }

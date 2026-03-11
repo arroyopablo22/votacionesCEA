@@ -6,6 +6,7 @@ const App = () => {
   const [estudiantes, setEstudiantes] = createSignal([]);
   const [candidatoId, setCandidatoId] = createSignal("");
   const [estudianteId, setEstudianteId] = createSignal("");
+  const [loading, setLoading] = createSignal(false);
 
   // Función para cargar estudiantes según el grado seleccionado
   const cargarEstudiantes = () => {
@@ -28,21 +29,37 @@ const App = () => {
   // Función para registrar voto
   const registrarVoto = (event) => {
     event.preventDefault();
+    setLoading(true);
+
     if (estudianteId()) {
+
+
       fetch("https://votacionescea-production.up.railway.app/api/registrar_voto.php", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ votante_id: estudianteId(), candidato_id: candidatoId() }),
+        body: JSON.stringify({
+          votante_id: estudianteId(),
+          candidato_id: candidatoId(),
+        }),
       })
         .then((response) => response.json())
-        .then((data) => {
-          alert(data.mensaje);
+        .then(() => {
+
+          setTimeout(() => {
+            alert("Voto registrado");
+            setLoading(false);
+          }, 2000);
+
           setEstudianteId("");
           setEstudiantes([]);
         })
-        .catch((error) => console.error("Error al registrar voto:", error));
+        .catch((error) => {
+          console.error("Error al registrar voto:", error);
+          setLoading(false);
+        });
+
     } else {
       alert("Por favor selecciona un estudiante.");
     }
@@ -108,29 +125,36 @@ const App = () => {
 
   return (
     <div class="fondo">
-      <h1>Elección de personero 2026</h1>
+      <Show when={loading()} fallback={<>
+        <h1>Elección de personero 2026</h1>
 
-      <label for="grado">Selecciona el grado:</label>
-      <select id="grado" onChange={(e) => onChangeGrade(e)} required>
-        <option value="">Selecciona un grado</option>
-        <option value="PROFESOR">PROFESOR</option>
-        <option value="PREESCOLAR">PREESCOLAR</option>
-        <option value="PRIMERO">PRIMERO</option>
-        <option value="SEGUNDO">SEGUNDO</option>
-        <option value="TERCERO">TERCERO</option>
-        <option value="CUARTO">CUARTO</option>
-        <option value="QUINTO">QUINTO</option>
-        <option value="SEXTO">SEXTO</option>
-        <option value="SEPTIMO">SEPTIMO</option>
-        <option value="OCTAVO">OCTAVO</option>
-        <option value="NOVENO">NOVENO</option>
-        <option value="DÉCIMO">DÉCIMO</option>
-        <option value="ONCE">ONCE</option>
-      </select>
+        <label for="grado">Selecciona el grado:</label>
+        <select id="grado" onChange={(e) => onChangeGrade(e)} required>
+          <option value="">Selecciona un grado</option>
+          <option value="PROFESOR">PROFESOR</option>
+          <option value="PREESCOLAR">PREESCOLAR</option>
+          <option value="PRIMERO">PRIMERO</option>
+          <option value="SEGUNDO">SEGUNDO</option>
+          <option value="TERCERO">TERCERO</option>
+          <option value="CUARTO">CUARTO</option>
+          <option value="QUINTO">QUINTO</option>
+          <option value="SEXTO">SEXTO</option>
+          <option value="SEPTIMO">SEPTIMO</option>
+          <option value="OCTAVO">OCTAVO</option>
+          <option value="NOVENO">NOVENO</option>
+          <option value="DECIMO">DÉCIMO</option>
+          <option value="ONCE">ONCE</option>
+        </select>
+        {formulario}
+
+      </>
+
+      }>
+        <p class='cargando'>⏳ Registrando voto...</p>
+      </Show>
 
 
-      {formulario}
-    </div>
+    </div >
   );
 };
 

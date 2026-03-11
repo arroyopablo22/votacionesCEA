@@ -9,11 +9,14 @@ $input = json_decode(file_get_contents('php://input'), true);
 $votanteId = $input['votante_id'];
 $candidatoId = $input['candidato_id'];
 
-$host = 'ep-patient-tree-aa8f8vne-pooler.westus3.azure.neon.tech';
-$port = '5432';
-$dbname = 'neondb';
-$user = 'neondb_owner';
-$password = 'npg_OeI8fA6aNsDg';
+$env = parse_ini_file(__DIR__ . '/../.env');
+
+$host = $env['DB_HOST'];
+$port = $env['DB_PORT'];
+$dbname = $env['DB_NAME'];
+$user = $env['DB_USER'];
+$password = $env['DB_PASSWORD'];
+$endpoint = $env['DB_ENDPOINT'];
 
 try {
     $pdo = new PDO("pgsql:host=$host;port=$port;dbname=$dbname;sslmode=require;options=endpoint=ep-patient-tree-aa8f8vne-pooler", $user, $password);
