@@ -5,7 +5,7 @@ const App = () => {
   const [grado, setGrado] = createSignal("");
   const [candidatos, setCandidatos] = createSignal([]);
   const [estudiantes, setEstudiantes] = createSignal([]);
-  const [resultados, setResultados] = createSignal([String, String]);
+  const [resultados, setResultados] = createSignal([]);
   const [candidatoId, setCandidatoId] = createSignal("");
   const [estudianteId, setEstudianteId] = createSignal("");
   const [loading, setLoading] = createSignal(false);
@@ -34,12 +34,17 @@ const App = () => {
   };
 
   //Función para cargar resultados:
-  const cargarResultados = () => {
-    debugger
-    fetch(`https://votacionescea-production.up.railway.app/api/cargar_resultados.php`)
-      .then((response) => response.json())
-      .then((data) => setResultados(data))
-      .catch((error) => console.error("Error al cargar estudiantes:", error));
+  async function cargarResultados() {
+    try {
+      const res = await fetch(`https://votacionescea-production.up.railway.app/api/cargar_resultados.php`);
+      const data = await res.json();
+
+      setResultados(data);
+      resultados();
+      debugger
+    } catch (error) {
+      console.error("Error cargando resultados:", error);
+    }
   };
 
   // Función para registrar voto
@@ -86,6 +91,7 @@ const App = () => {
   function onChangeGrade(e) {
     setGrado(e.target.value);
     cargarEstudiantes();
+    cargarResultados();
   }
 
   function verificarClave() {
@@ -209,7 +215,7 @@ const App = () => {
           <div class="popup">
             <h2>Resultados de la votación</h2>
 
-            {cargarResultados()}
+            {/* Aquí colocas tu tabla o datos */}
             <div id="resultados">
               {/* resultados de tu API */}
             </div>
