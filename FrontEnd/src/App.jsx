@@ -155,6 +155,7 @@ const App = () => {
 
   function onChangeGrade(e) {
     setGrado(e.target.value);
+    if (e.target.value.length == 0 || grado != e.target.value) setEstudianteId("");
     cargarEstudiantes();
   }
 
