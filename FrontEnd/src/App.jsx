@@ -184,9 +184,11 @@ const App = () => {
             required
           >
             <option value="" hidden>Selecciona un estudiante</option>
-            {estudiantes().map((estudiante) => (
-              <option value={estudiante.id}>{estudiante.nombre}</option>
-            ))}
+            {estudiantes()
+              .sort((a, b) => a.nombre.localeCompare(b.nombre))
+              .map((estudiante) => (
+                <option value={estudiante.id}>{estudiante.nombre}</option>
+              ))}
           </select>
 
           <Show when={estudianteId().length > 0}>
