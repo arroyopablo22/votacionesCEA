@@ -200,7 +200,7 @@ button[type="submit"]:hover {
   padding: 25px;
   border-radius: 10px;
   text-align: center;
-  width: 300px;
+  width: 100%;
 }
 
 .popup input {

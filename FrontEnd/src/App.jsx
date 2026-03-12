@@ -1,5 +1,11 @@
-import { createSignal, Show, onMount } from "solid-js";
+import { createSignal, Show, onMount, createEffect } from "solid-js";
+import ChartDataLabels from "chartjs-plugin-datalabels";
 import toast, { Toaster } from "solid-toast";
+import Chart from "chart.js/auto";
+Chart.register(ChartDataLabels);
+
+let canvasRef;
+let chart;
 
 const App = () => {
   const [grado, setGrado] = createSignal("");
@@ -38,10 +44,7 @@ const App = () => {
     try {
       const res = await fetch(`https://votacionescea-production.up.railway.app/api/cargar_resultados.php`);
       const data = await res.json();
-
       setResultados(data);
-      resultados();
-      debugger
     } catch (error) {
       console.error("Error cargando resultados:", error);
     }
@@ -88,14 +91,78 @@ const App = () => {
     cargarCandidatos();
   });
 
+  createEffect(() => {
+
+    if (!accesoPermitido() || !canvasRef) return;
+
+    const labels = resultados().map(c => c.nombre);
+    const votos = resultados().map(c => c.total_votos);
+
+    const ctx = canvasRef.getContext("2d");
+
+    if (chart) chart.destroy();
+
+    const colores = [
+      "#ff6384",
+      "#36a2eb",
+      "#ffce56",
+      "#4bc0c0",
+      "#9966ff",
+      "#ff9f40"
+    ];
+
+    chart = new Chart(ctx, {
+      type: "bar",
+      data: {
+        labels: labels,
+        datasets: [{
+          label: "Votos",
+          data: votos,
+          backgroundColor: labels.map((_, i) => colores[i % colores.length]),
+          borderWidth: 1
+        }]
+      },
+      options: {
+        responsive: true,
+        plugins: {
+          legend: {
+            display: false
+          },
+          datalabels: {
+            color: "white",
+            anchor: "center",
+            align: "center",
+            font: {
+              weight: "bold",
+              size: 20
+            }
+          }
+        },
+        scales: {
+          x: {
+            ticks: {
+              color: "black",
+              font: {
+                weight: "bold"
+              }
+            }
+          }
+        },
+      }
+    });
+
+  });
+
   function onChangeGrade(e) {
     setGrado(e.target.value);
     cargarEstudiantes();
-    cargarResultados();
   }
 
-  function verificarClave() {
+  async function verificarClave() {
     if (password() === CLAVE) {
+
+      await cargarResultados();
+
       setAccesoPermitido(true);
       setMostrarLogin(false);
     } else {
@@ -214,11 +281,7 @@ const App = () => {
         <div class="popup-bg">
           <div class="popup">
             <h2>Resultados de la votación</h2>
-
-            {/* Aquí colocas tu tabla o datos */}
-            <div id="resultados">
-              {/* resultados de tu API */}
-            </div>
+            <canvas ref={canvasRef}></canvas>
 
             <button onClick={() => setAccesoPermitido(false)}>Cerrar</button>
           </div>
